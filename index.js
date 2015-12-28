@@ -110,11 +110,14 @@
 
   if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     module.exports = ansiStream;
-    module.exports._objectToCssString = objectToCssString;
-    module.exports._inlineStyles = inlineStyles;
-    module.exports._setStyles = setStyles;
-    module.exports._isAnsiRule = isAnsiRule;
-    module.exports._bitToRGB = bitToRGB;
+
+    module.exports = Object.assign(ansiStream, {
+      _objectToCssString: objectToCssString,
+      _inlineStyles: inlineStyles,
+      _setStyles: setStyles,
+      _isAnsiRule: isAnsiRule,
+      _bitToRGB: bitToRGB
+    });
   } else {
     window.ansiStream = ansiStream;
   }
