@@ -93,7 +93,6 @@
 
   function parseLogStream(stream, onChunk) {
     var css = {};
-    var ret = {};
 
     stream.read().then(r => {
       var html = decoder.decode(r.value);
@@ -107,8 +106,6 @@
       onChunk(html);
       parseLogStream(stream, onChunk);
     });
-
-    return ret;
   };
 
   if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
