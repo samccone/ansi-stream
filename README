@@ -11,6 +11,7 @@ Todo
 * Escape html
 * Custom colors in opts
 * html ID per line
+* batch innerHTML setting inside of RAF
 
 ----------------------------------------------
 
