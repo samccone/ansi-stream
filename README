@@ -1,0 +1,20 @@
+ansi-stream
+
+A streaming text => html parser
+
+----------------------------------------------
+
+Todo
+
+* Add high intensity foreground parsing
+* Add high intensity background parsing
+* Escape html
+* Custom colors in opts
+* html ID per line
+
+----------------------------------------------
+
+Resources
+
+http://www.inwap.com/pdp10/ansicode.txt
+https://en.wikipedia.org/wiki/ANSI_escape_code

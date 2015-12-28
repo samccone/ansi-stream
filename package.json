@@ -1,0 +1,7 @@
+{
+  "name": "ansi-stream",
+  "main": "index.js",
+  "devDependencies": {
+    "mocha": "^2.3.4"
+  }
+}

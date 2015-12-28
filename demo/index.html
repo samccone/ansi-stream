@@ -1,0 +1,21 @@
+<html>
+  <style>
+    html {
+      background: #1F1F1F;
+      color: #FFF;
+      font-family: monospace;
+    }
+  </style>
+  <body>
+    <script src="../index.js"></script>
+    <script>
+      function onChunk(htmlChunk) {
+        document.body.innerHTML += htmlChunk;
+      }
+
+      window.ansiStream('../test/mocks/sample.log', onChunk, {
+        background: '#1F1F1F'
+      });
+    </script>
+  </body>
+</html>
