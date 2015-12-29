@@ -9,13 +9,26 @@
   <body>
     <script src="../index.js"></script>
     <script>
+      var chunks = ''
+
       function onChunk(htmlChunk) {
-        document.body.innerHTML += htmlChunk;
+        chunks += htmlChunk;
       }
 
       window.ansiStream('../test/mocks/sample.log', onChunk, {
         background: '#1F1F1F'
       });
+
+      function chunkLoop() {
+        if (chunks) {
+          document.body.innerHTML += chunks;
+          chunks = '';
+        }
+
+        requestAnimationFrame(chunkLoop);
+      }
+
+      requestAnimationFrame(chunkLoop);
     </script>
   </body>
 </html>
