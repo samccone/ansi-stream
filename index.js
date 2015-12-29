@@ -18,11 +18,18 @@
   }
 
   // 0 - 7 int to rgb
-  function bitToRGB(v) {
-    var base = v.toString(2).split('');
+  function bitToRGB(v, opts) {
+    opts = opts || {};
 
-    return 'rgb(' + [0,0,0].slice(base.length).concat(base)
-      .map(v => v * 255).reverse().join(',') + ')';
+    var base = v.toString(2).split('');
+    var rgbArr = [0,0,0].slice(base.length).concat(base)
+      .map(v => v * 255).reverse();
+
+    if (opts.intensity === 'high') {
+      rgbArr = rgbArr.map(v => v === 0 ? 85 : v);
+    }
+
+    return 'rgb(' + rgbArr.join(',') + ')';
   }
 
   function isAnsiRule(chunk) {
@@ -39,22 +46,38 @@
     return `${ret}<span style="${objectToCssString(css)}">${chunk}`
   }
 
+  function isForeground(code) {
+    return Boolean(code[0] === '3' || code[0] === '9');
+  }
+
+  function isBackground(code) {
+    return Boolean(code[0] === '4' || code.slice(0, 2).join('') === '10');
+  }
+
+  function getIntensity(code) {
+    return (code[0] === '9' || code[0] === '1') ? 'high' : 'low';
+  }
+
   function setStyles(ansiCode, css) {
     var matched = matched = ansiCode.match(colorRegex)[1].split(';').forEach((code) => {
       let split = code.split('');
-      let intensity = parseInt(split[1], 10);
+      let color = parseInt(split.slice(-1), 10);
 
-      if (split[0] === '3') {
-        css['color'] = (split[1] === '9')
-          ? DEFAULT_TEXT : bitToRGB(intensity);
+      if (isForeground(split)) {
+        css['color'] = (color === '9')
+          ? DEFAULT_TEXT : bitToRGB(color, {
+            intensity: getIntensity(split),
+          });
       }
 
-      if (split[0] === '4') {
-        css['background'] = (split[1] === '9')
-          ? DEFAULT_BACKGROUND : bitToRGB(intensity);
+      if (isBackground(split)) {
+        css['background'] = (color === '9')
+          ? DEFAULT_BACKGROUND : bitToRGB(color, {
+            intensity: getIntensity(split),
+          });
       }
 
-      if (split[0] === '1') {
+      if (split.length < 3 && split[0] === '1') {
         css['font-weight'] = 'bold';
       }
 
@@ -116,7 +139,10 @@
       _inlineStyles: inlineStyles,
       _setStyles: setStyles,
       _isAnsiRule: isAnsiRule,
-      _bitToRGB: bitToRGB
+      _bitToRGB: bitToRGB,
+      _isForeground: isForeground,
+      _isBackground: isBackground,
+      _getIntensity: getIntensity,
     });
   } else {
     window.ansiStream = ansiStream;

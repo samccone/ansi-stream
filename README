@@ -6,8 +6,6 @@ A streaming text => html parser
 
 Todo
 
-* Add high intensity foreground parsing
-* Add high intensity background parsing
 * Escape html
 * Custom colors in opts
 * html ID per line
