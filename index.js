@@ -2,8 +2,8 @@
   'use strict';
 
   var decoder = new TextDecoder();
-  var ansiRegex = /(\[.*?m)/g;
-  var colorRegex = /\[(.*)m/;
+  var ansiRegex = /(\\[.*?m)/g;
+  var colorRegex = /\\[(.*)m/;
   var newLineRegex = /\n/g;
   var DEFAULT_TEXT = '#fff';
   var DEFAULT_BACKGROUND = '#000';
