@@ -10,6 +10,7 @@
     <script src="../index.js"></script>
     <script>
       var chunks = ''
+      var done = false;
 
       function onChunk(htmlChunk) {
         chunks += htmlChunk;
@@ -17,6 +18,9 @@
 
       window.ansiStream('../test/mocks/sample.log', onChunk, {
         background: '#1F1F1F'
+      }).then(function() {
+        console.log('done');
+        done = true;
       });
 
       function chunkLoop() {
@@ -25,7 +29,9 @@
           chunks = '';
         }
 
-        requestAnimationFrame(chunkLoop);
+        if (done === false) {
+          requestAnimationFrame(chunkLoop);
+        }
       }
 
       requestAnimationFrame(chunkLoop);

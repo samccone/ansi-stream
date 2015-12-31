@@ -124,10 +124,16 @@
     }, '');
   }
 
-  function parseLogStream(stream, onChunk) {
+  function parseLogStream(stream, onChunk, inProgress) {
     var css = {};
+    inProgress = inProgress || Promise.defer();
 
     stream.read().then(r => {
+      if (r.done) {
+        inProgress.resolve();
+        return;
+      }
+
       var html = decoder.decode(r.value);
       html = html.split(newLineRegex)
       .map(function(line) {
@@ -139,6 +145,8 @@
       onChunk(html);
       parseLogStream(stream, onChunk);
     });
+
+    return inProgress;
   };
 
   if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
