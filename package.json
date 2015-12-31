@@ -2,9 +2,11 @@
   "name": "ansi-stream",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "istanbul cover _mocha -- test/ -R spec"
   },
   "devDependencies": {
+    "istanbul": "^0.4.1",
     "mocha": "^2.3.4"
   }
 }
