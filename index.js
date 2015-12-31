@@ -47,11 +47,15 @@
   }
 
   function isForeground(code) {
-    return Boolean(code[0] === '3' || code[0] === '9');
+    return Boolean((
+      code[0] === '3' || code[0] === '9')
+      && code.length === 2);
   }
 
   function isBackground(code) {
-    return Boolean(code[0] === '4' || code.slice(0, 2).join('') === '10');
+    return Boolean((
+      code[0] === '4' && code.length === 2) ||
+      code[0] === '1' && code.length === 3)
   }
 
   function getIntensity(code) {
@@ -77,7 +81,7 @@
           });
       }
 
-      if (split.length < 3 && split[0] === '1') {
+      if (code === '1') {
         css['font-weight'] = 'bold';
       }
 
@@ -85,10 +89,16 @@
         delete css['font-weight'];
       }
 
-      if (split[0] === '0') {
-        delete css['color'];
-        delete css['background'];
-        delete css['font-weight'];
+      if (code === '4') {
+        css['text-decoration'] = 'underline';
+      }
+
+      if (code === '24') {
+        delete css['text-decoration'];
+      }
+
+      if (code === '0') {
+        Object.keys(css).forEach(key => delete css[key])
       }
     });
   }

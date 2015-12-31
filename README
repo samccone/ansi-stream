@@ -6,7 +6,6 @@ A streaming text => html parser
 
 Todo
 
-* Add underline handling
 * Escape html
 * Custom colors in opts
 * html ID per line

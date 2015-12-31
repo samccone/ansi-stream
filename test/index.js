@@ -53,24 +53,50 @@ describe('setting styles', function() {
       'font-weight': 'bold'});
   });
 
+  it('handles underlines', function() {
+    ansiStream._setStyles('[4m', this.retCSS);
+    assert.deepEqual(this.retCSS, {'text-decoration': 'underline'});
+  });
+
+  it('handles underline cancel', function() {
+    ansiStream._setStyles('[4m', this.retCSS);
+    ansiStream._setStyles('[24m', this.retCSS);
+    assert.deepEqual(this.retCSS, {});
+  });
+
   it('handles bold cancel', function() {
     ansiStream._setStyles('[1;22m', this.retCSS);
+    assert.deepEqual(this.retCSS, {});
+  });
 
+  it('handles complex rule', function() {
+    ansiStream._setStyles('[1;4;34;43m', this.retCSS);
+    assert.deepEqual(this.retCSS, {
+      'background': 'rgb(255,255,0)',
+      'color': 'rgb(0,0,255)',
+      'font-weight': 'bold',
+      'text-decoration': 'underline',
+    });
+  })
+
+  it('handles clearing all', function() {
+    ansiStream._setStyles('[1;4;34;43m', this.retCSS);
+    ansiStream._setStyles('[0m', this.retCSS);
     assert.deepEqual(this.retCSS, {});
   });
 });
 
 describe('utils', function() {
   it('detects foreground', function() {
-    assert.equal(ansiStream._isForeground(['3']), true);
-    assert.equal(ansiStream._isForeground(['4']), false);
-    assert.equal(ansiStream._isForeground(['9']), true);
+    assert.equal(ansiStream._isForeground(['3', '0']), true, 'leading 3');
+    assert.equal(ansiStream._isForeground(['4', '0']), false, 'invalid leading 4');
+    assert.equal(ansiStream._isForeground(['9', '0']), true, 'leading 9');
   });
 
   it('detects background', function() {
-    assert.equal(ansiStream._isBackground(['4']), true);
-    assert.equal(ansiStream._isBackground(['1']), false);
-    assert.equal(ansiStream._isBackground(['1', '0']), true);
+    assert.equal(ansiStream._isBackground(['4', '0']), true, 'leading 4');
+    assert.equal(ansiStream._isBackground(['1', '0']), false, 'not long enough leading 1');
+    assert.equal(ansiStream._isBackground(['1', '0', '0']), true, 'long enough leading 1');
   });
 
   it('gets intensity', function() {
